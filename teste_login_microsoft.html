@@ -164,18 +164,6 @@
 // ─── Configuração MSAL ────────────────────────────────────────────────────────
 // Usa o "common" endpoint — funciona com qualquer tenant Microsoft corporativo
 // sem precisar do tenant ID específico da empresa.
-const msalConfig = {
-  auth: {
-    clientId: "04b07795-8ddb-461a-bbee-02f9e1bf7b46", // Azure CLI public client (multi-tenant, sem chave)
-    authority: "https://login.microsoftonline.com/common",
-    redirectUri: window.location.href.split('?')[0],
-  },
-  cache: {
-    cacheLocation: "sessionStorage",
-    storeAuthStateInCookie: false,
-  }
-};
-
 const loginRequest = {
   scopes: ["User.Read"],
 };
@@ -188,6 +176,17 @@ window.addEventListener('load', async () => {
     mostrarErro("Biblioteca Microsoft não carregou. Verifique sua conexão e recarregue a página.");
     return;
   }
+  const msalConfig = {
+    auth: {
+      clientId: "04b07795-8ddb-461a-bbee-02f9e1bf7b46",
+      authority: "https://login.microsoftonline.com/common",
+      redirectUri: window.location.origin + window.location.pathname,
+    },
+    cache: {
+      cacheLocation: "sessionStorage",
+      storeAuthStateInCookie: false,
+    }
+  };
   try {
     msalInstance = new msal.PublicClientApplication(msalConfig);
     await msalInstance.initialize();
